@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using ContosoUniversity.Data;
+using Microsoft.EntityFrameworkCore;
 namespace ContosoUniversity
 {
     public class Startup
@@ -30,6 +31,10 @@ namespace ContosoUniversity
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            //启动文件，在依赖注入容器中注册数据库上下文对象。
+            services.AddDbContext<SchoolContext>(options =>
+                              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

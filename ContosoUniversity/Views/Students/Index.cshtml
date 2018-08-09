@@ -1,0 +1,74 @@
+﻿@model X.PagedList.IPagedList<ContosoUniversity.Models.Student>
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="Index" method="get" class="form-inline" role="form">
+    <label for="pageSize" class="control-label">每页指定记录数：</label>
+    <div class="form-group">
+        <input type="number" name="pageSize" id="pageSize" value="@ViewData["PageSize"]" class="form-control" size="1" maxlength="4" min="1" max="1000" /> @* size属性用来设置显示文本框的宽度，在Bootstrap样式下同样实用，另外，maxlength用来设置文本框接受字符的个数，输多了输不进去。*@
+    </div>
+    <text>&nbsp;&nbsp;</text>
+    <label for="searchString" class="control-label">片名：</label>
+    <div class="form-group">
+        @Html.TextBox("searchString", ViewData["SearchString"] as string, htmlAttributes: new { @class = "form-control", placeHolder = "请输入片名" })
+    </div>
+    <text>&nbsp;&nbsp;</text>
+    <input type="submit" value="Search" class="btn btn-primary" />
+    <a asp-action="Index">Back to Full List</a>
+    </p>
+
+</form>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"  asp-route-searchString="@ViewData["SearchString"]" asp-route-pageSize="@ViewData["PageSize"]">LastName</a>
+            </th>
+            <th>
+               FirstMidName
+            </th>
+            <th>               
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-searchString="@ViewData["SearchString"]" asp-route-pageSize="@ViewData["PageSize"]">EnrollmentDate</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstMidName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnrollmentDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                
+            </td>
+        </tr>
+}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-muted" colspan="4">
+                每页 @Model.PageSize 条记录，本页有 @Model.Count 条记录,共有 @Model.TotalItemCount 条记录。第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，共 @Model.PageCount 页。
+                @*这个条件表达式的目的是防止出现 记录为0的情况，会出现 总页数为0，而当前是第1页的情况。*@
+            </td>
+        </tr>
+    </tfoot>
+</table>
+@Html.PagedListPager(Model,page =>Url.Action("Index",new { page,sortOrder = ViewData["CurrentSort"], searchString = ViewData["SearchString"],pageSize=ViewData["PageSize"] }), new PagedListRenderOptions { LinkToFirstPageFormat = "首页", LinkToNextPageFormat = "下一页", LinkToPreviousPageFormat = "上一页", LinkToLastPageFormat = "末页", MaximumPageNumbersToDisplay = 5, DisplayItemSliceAndTotal = false })
