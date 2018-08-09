@@ -34,7 +34,7 @@ namespace ContosoUniversity
 
             //启动文件，在依赖注入容器中注册数据库上下文对象。
             services.AddDbContext<SchoolContext>(options =>
-                              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                              options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))); //.UseLazyLoadingProxies()启用Layzing loading.
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

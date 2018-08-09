@@ -23,6 +23,7 @@ namespace ContosoUniversity.Models
         public int DepartmentID { get; set; }
 
 
+        [Display(Name ="部门")]
         public virtual Department Department { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }
 

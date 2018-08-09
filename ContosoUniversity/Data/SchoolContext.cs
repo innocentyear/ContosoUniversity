@@ -42,5 +42,7 @@ namespace ContosoUniversity.Data
                 .HasKey(c => new { c.CourseID, c.InstructorID });
 
         }
+
+        
     }
 }
