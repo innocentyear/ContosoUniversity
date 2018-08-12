@@ -7,36 +7,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ContosoUniversity.Models
 {
-    public class Student
+    public class Student:Person
     {
-        public int ID { get; set; }
-
-        [Required(ErrorMessage ="{0}不能为空")]
-        [StringLength(50,ErrorMessage ="{0}不能多于{1}个字符")]
-        [Display(Name = "姓")]
-        public string LastName { get; set; }
-
-        [Required(ErrorMessage ="{0}是必需的")]
-        [StringLength(50,ErrorMessage ="{0}不能多于{1}个字符",MinimumLength =1)]
-        [Column("FirstName")]
-        [Display(Name ="名")]
-        public string FirstMidName { get; set; }
-
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString ="{0:yyyy-MM-dd}",ApplyFormatInEditMode =true)]
         [Display(Name ="入学日期")]
         public DateTime EnrollmentDate { get; set; }
 
-        [Display(Name="全名")]
-        public string FullName
-        {
-            get
-            {
-                return LastName + ", " + FirstMidName;
-            }
-        }
 
-         //在模型类里面定义导航属性的时候，可以不使用 virtual关键字。
+        //在模型类里面定义导航属性的时候，可以不使用 virtual关键字。但加入virtual关键字可以实现Lazy loading.
+       // EF Core2.0及1.0版本不支持Lazy loading,但从EF Core2.1开始支持Lazy loading需要使用代理类和在导航属性上添加Virtual关键字，跟原来的EF6一样。
         public virtual ICollection<Enrollment> Enrollments { get; set; }
     }
 }

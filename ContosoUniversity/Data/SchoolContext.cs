@@ -26,6 +26,8 @@ namespace ContosoUniversity.Data
 
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
 
+        public DbSet<Person> People { get; set; } //Visual Studio 2017功能太强大了，居然可以自动找出单词的复数形式。
+
         //定义表格名称为单数，默认为表格名称为复数形式。
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,8 +38,9 @@ namespace ContosoUniversity.Data
             modelBuilder.Entity<Instructor>().ToTable("Instructor");
             modelBuilder.Entity<OfficeAssignment>().ToTable("OfficeAssginment");
             modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignment");
+            modelBuilder.Entity<Person>().ToTable("Person");
 
-            //配置连接表 的主键为组合主键
+            //如果一个表是纯连接表，它的主键是组合主键，同时出现两个组合主键的记录在数据库中只能出现一次。只能通过使用FluetAPI而不能使用属性来配置连接表。
             modelBuilder.Entity<CourseAssignment>()
                 .HasKey(c => new { c.CourseID, c.InstructorID });
 
